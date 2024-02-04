@@ -2,50 +2,50 @@
   hosts: _ansible_nodejs
   become: true
   tasks:
-    - name: update all packages
-      ansible.builtin.yum:
-        name: "*"
-        state: latest
+    # - name: update all packages
+    #   ansible.builtin.yum:
+    #     name: "*"
+    #     state: latest
 
-    - name: remove old docker packages
-      ansible.builtin.yum:
-        name:
-          - docker
-          - docker-client
-          - docker-client-latest
-          - docker-common
-          - docker-latest
-          - docker-latest-logrotate
-          - docker-logrotate
-          - docker-engine
-        state: removed
+    # - name: remove old docker packages
+    #   ansible.builtin.yum:
+    #     name:
+    #       - docker
+    #       - docker-client
+    #       - docker-client-latest
+    #       - docker-common
+    #       - docker-latest
+    #       - docker-latest-logrotate
+    #       - docker-logrotate
+    #       - docker-engine
+    #     state: removed
 
-    - name: install yum utils
-      ansible.builtin.yum:
-        name: "yum-utils"
-        state: latest
+    # - name: install yum utils
+    #   ansible.builtin.yum:
+    #     name: "yum-utils"
+    #     state: latest
 
-    - name: add docker repo
-      ansible.builtin.get_url:
-        url: https://download.docker.com/linux/centos/docker-ce.repo
-        dest: /etc/yum.repos.d/docker-ce.repo
+    # - name: add docker repo
+    #   ansible.builtin.get_url:
+    #     url: https://download.docker.com/linux/centos/docker-ce.repo
+    #     dest: /etc/yum.repos.d/docker-ce.repo
 
-    - name: install docker
-      ansible.builtin.package:
-        name: docker-ce
-        state: latest
+    # - name: install docker
+    #   ansible.builtin.package:
+    #     name: docker-ce
+    #     state: latest
 
-    - name: add user ec2-user to docker group
-      ansible.builtin.user:
-        name: ec2-user
-        groups: docker
-        append: yes
+    # - name: add user ec2-user to docker group
+    #   ansible.builtin.user:
+    #     name: ec2-user
+    #     groups: docker
+    #     append: yes
 
-    - name: start docker service
-      ansible.builtin.service:
-        name: docker
-        state: started
-        enabled: yes
+    # - name: start docker service
+    #   ansible.builtin.service:
+    #     name: docker
+    #     state: started
+    #     enabled: yes
 
     - name: copy files to the nodejs node
       ansible.builtin.copy:
@@ -58,14 +58,14 @@
         state: absent
         force_kill: true
 
-    - name: remove yasin/nodejs image
+    - name: remove clarusway/nodejs image
       community.docker.docker_image:
-        name: yasin/nodejs
+        name: clarusway/nodejs
         state: absent
 
     - name: build docker image
       community.docker.docker_image:
-        name: yasin/nodejs
+        name: clarusway/nodejs
         build:
           path: /home/ec2-user/nodejs
         source: build
@@ -79,7 +79,7 @@
     - name: run nodejs docker container
       community.docker.docker_container:
         name: cw_nodejs
-        image: yasin/nodejs
+        image: clarusway/nodejs
         state: started
         ports:
           - "5000:5000"
@@ -87,5 +87,4 @@
 
     - name: print the container info
       ansible.builtin.debug:
-        var: container_info  
-
+        var: container_info     

@@ -1,3 +1,0 @@
-container_path: /home/ec2-user/nodejs
-container_name: cw_nodejs
-image_name: yasin/nodejs

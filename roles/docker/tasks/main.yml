@@ -1,7 +1,5 @@
-- name: install docker
-  hosts: _development
-  become: true
-  tasks:
+---
+# tasks file for docker
     - name: update all packages
       ansible.builtin.yum:
         name: "*"
